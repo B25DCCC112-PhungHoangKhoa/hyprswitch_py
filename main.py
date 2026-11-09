@@ -36,13 +36,13 @@ logging.basicConfig(
 
 
 def print_help():
-    print("""hyprswitch - Display projection switcher for Hyprland
+    print("""hyprswitch_py - Display projection switcher for Hyprland (Python Edition)
 
 Usage:
-  hyprswitch                     Open switcher OSD or cycle to next mode (Super+P)
-  hyprswitch --status            Print connected monitor detection & current mode
-  hyprswitch --apply <mode>      Apply mode directly without UI (pc, duplicate, extend, second)
-  hyprswitch --help              Show this help message
+  hyprswitch_py                     Open switcher OSD or cycle to next mode (Super+P)
+  hyprswitch_py --status            Print connected monitor detection & current mode
+  hyprswitch_py --apply <mode>      Apply mode directly without UI (pc, duplicate, extend, second)
+  hyprswitch_py --help              Show this help message
 
 Display Modes:
   pc        PC Screen Only (built-in eDP only, disable external)

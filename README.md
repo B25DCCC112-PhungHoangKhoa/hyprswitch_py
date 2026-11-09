@@ -1,4 +1,4 @@
-# hyprswitch
+# hyprswitch_py
 
 A modern **Python + GTK4** on-screen display (OSD) projection switcher for Hyprland that replaces manual editing of `hyprland.lua`. Designed to be triggered with **`Super + P`** (matching the Windows projection flyout workflow), it provides fast multi-instance cycling across standard display modes with zero screen flickering during navigation, auto-detects external monitors' optimal resolutions and refresh rates, and features a frosted-glass **Caelestia shell aesthetic**.
 
@@ -9,7 +9,7 @@ A modern **Python + GTK4** on-screen display (OSD) projection switcher for Hyprl
 - **Caelestia Shell Aesthetic & Material 3 Styling**:
   - Dynamically extracts Material 3 color tokens from `~/.local/state/caelestia/scheme.json` (with fallback to `~/.config/hypr/scheme/current.lua`).
   - Frosted translucent glass background with deep drop shadows and smooth 32px corner rounding.
-  - Hyprland layer-shell blur (`layerrule = blur true, match:namespace hyprswitch` and `ignorealpha 0.2`) to blur wallpaper behind the switcher window.
+  - Hyprland layer-shell blur (`layerrule = blur true, match:namespace hyprswitch.*` and `ignorealpha 0.2`) to blur wallpaper behind the switcher window.
   - Active/selected mode lights up with a vibrant neon primary glowing border (`#primary` / `#f5b6c3`) and tinted container fill.
   - Status display and footer controls styled in Caelestia pill chips (`border-radius: 9999px`).
 - **Auto-Detection of External Resolutions & Refresh Rates**:
@@ -43,9 +43,9 @@ Run the installer:
 
 The installation script will:
 1. Verify required dependencies (`python3`, `python-gobject`, `gtk4`, `gtk4-layer-shell`, `hyprctl`).
-2. Symlink `main.py` into `~/.local/bin/hyprswitch`.
+2. Symlink `main.py` into `~/.local/bin/hyprswitch_py`.
 3. Add `pcall(require, "monitors")` to `~/.config/hypr/hyprland.lua`.
-4. Add the `SUPER + P` keybind (`hl.bind("SUPER +  P", hl.dsp.exec_cmd("hyprswitch"))`) to `~/.config/hypr/hyprland/keybinds.lua`.
+4. Add the `SUPER + P` keybind (`hl.bind("SUPER +  P", hl.dsp.exec_cmd("hyprswitch_py"))`) to `~/.config/hypr/hyprland/keybinds.lua`.
 5. Add layer rules (blur, popin animation, ignorealpha) to `~/.config/hypr/hyprland/rules.conf`.
 6. Reload the active Hyprland configuration automatically.
 
@@ -66,20 +66,20 @@ The installation script will:
 
 ## CLI Usage
 
-`hyprswitch` can also be queried or scripted directly from the terminal without opening the UI:
+`hyprswitch_py` can also be queried or scripted directly from the terminal without opening the UI:
 
 ```bash
 # Open switcher OSD / cycle mode (called by Super + P)
-hyprswitch
+hyprswitch_py
 
 # Check monitor auto-detection and current active mode
-hyprswitch --status
+hyprswitch_py --status
 
 # Apply a mode directly via CLI
-hyprswitch --apply pc
-hyprswitch --apply duplicate
-hyprswitch --apply extend
-hyprswitch --apply second
+hyprswitch_py --apply pc
+hyprswitch_py --apply duplicate
+hyprswitch_py --apply extend
+hyprswitch_py --apply second
 ```
 
 ---

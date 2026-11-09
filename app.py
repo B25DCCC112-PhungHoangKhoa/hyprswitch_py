@@ -25,7 +25,7 @@ AUTO_DISMISS_MS = 8000
 class HyprswitchApp(Gtk.Application):
     def __init__(self):
         super().__init__(
-            application_id="org.hyprland.hyprswitch",
+            application_id="org.hyprland.hyprswitch_py",
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE
         )
         self.monitor_manager = MonitorManager()

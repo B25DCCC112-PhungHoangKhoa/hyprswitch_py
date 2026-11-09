@@ -3,9 +3,9 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$HOME/.local/bin"
-TARGET_LINK="$BIN_DIR/hyprswitch"
+TARGET_LINK="$BIN_DIR/hyprswitch_py"
 
-echo "=== Installing hyprswitch ==="
+echo "=== Installing hyprswitch_py (Python Edition) ==="
 
 # 1. Dependency checks
 echo "Checking dependencies..."
@@ -58,18 +58,16 @@ if [ -f "$HYPR_LUA" ]; then
     fi
 fi
 
-# 4. Setup keybind in ~/.config/hypr/hyprland/keybinds.lua if not present
+# 4. Setup keybind in ~/.config/hypr/hyprland/keybinds.lua
 KEYBINDS_LUA="$HOME/.config/hypr/hyprland/keybinds.lua"
 if [ -f "$KEYBINDS_LUA" ]; then
-    if grep -q 'hl\.bind("SUPER, P", hl\.dsp\.exec_cmd("hyprswitch"))' "$KEYBINDS_LUA"; then
-        sed -i 's/hl\.bind("SUPER, P", hl\.dsp\.exec_cmd("hyprswitch"))/hl\.bind("SUPER +  P", hl\.dsp\.exec_cmd("hyprswitch"))/g' "$KEYBINDS_LUA"
-        echo "✓ Updated hyprswitch keybind syntax to 'SUPER +  P' in $KEYBINDS_LUA"
-    elif ! grep -q 'hyprswitch' "$KEYBINDS_LUA"; then
-        echo "Adding Super+P keybind to $KEYBINDS_LUA..."
-        echo -e '\n-- Display switcher (hyprswitch)\nhl.bind("SUPER +  P", hl.dsp.exec_cmd("hyprswitch"))' >> "$KEYBINDS_LUA"
-        echo "✓ Added 'SUPER +  P' bind to $KEYBINDS_LUA"
+    if grep -q 'hl\.dsp\.exec_cmd("hyprswitch' "$KEYBINDS_LUA"; then
+        sed -i 's/hl\.bind("SUPER.*", hl\.dsp\.exec_cmd("hyprswitch[^"]*"))/hl\.bind("SUPER +  P", hl\.dsp\.exec_cmd("hyprswitch_py"))/g' "$KEYBINDS_LUA"
+        echo "✓ Updated keybind to run 'hyprswitch_py' in $KEYBINDS_LUA"
     else
-        echo "✓ $KEYBINDS_LUA already contains hyprswitch bind."
+        echo "Adding Super+P keybind to $KEYBINDS_LUA..."
+        echo -e '\n-- Display switcher (hyprswitch_py)\nhl.bind("SUPER +  P", hl.dsp.exec_cmd("hyprswitch_py"))' >> "$KEYBINDS_LUA"
+        echo "✓ Added 'SUPER +  P' bind to $KEYBINDS_LUA"
     fi
 fi
 
@@ -78,10 +76,12 @@ RULES_CONF="$HOME/.config/hypr/hyprland/rules.conf"
 if [ -f "$RULES_CONF" ]; then
     if ! grep -q 'match:namespace hyprswitch' "$RULES_CONF"; then
         echo "Adding hyprswitch layer rules to $RULES_CONF..."
-        echo -e '\n# hyprswitch\nlayerrule = animation popin 85%, match:namespace hyprswitch\nlayerrule = blur true, match:namespace hyprswitch\nlayerrule = ignorealpha 0.2, match:namespace hyprswitch' >> "$RULES_CONF"
+        echo -e '\n# hyprswitch\nlayerrule = animation popin 85%, match:namespace hyprswitch.*\nlayerrule = blur true, match:namespace hyprswitch.*\nlayerrule = ignorealpha 0.2, match:namespace hyprswitch.*' >> "$RULES_CONF"
         echo "✓ Added hyprswitch layer rules to $RULES_CONF"
     else
-        echo "✓ $RULES_CONF already contains hyprswitch layer rules."
+        # Ensure wildcard or regex is present
+        sed -i 's/match:namespace hyprswitch$/match:namespace hyprswitch.*/g' "$RULES_CONF"
+        echo "✓ Layer rules verified in $RULES_CONF"
     fi
 fi
 
@@ -92,6 +92,6 @@ if command -v hyprctl &>/dev/null && [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
 fi
 
 echo ""
-echo "hyprswitch installed successfully!"
-echo "Run 'hyprswitch --status' to inspect your monitors."
+echo "hyprswitch_py installed successfully!"
+echo "Run 'hyprswitch_py --status' to inspect your monitors."
 echo "Press Super + P to open the switcher and cycle display modes."
